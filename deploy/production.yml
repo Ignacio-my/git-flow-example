@@ -19,7 +19,7 @@ steps:
       configFilePath: "deploy/gitConfig.yml" 
     displayName: "generando la nueva versión"
 
-    - task: NodeTool@0    
+  - task: NodeTool@0    
     inputs:
       versionSpec: "10.x"
       
