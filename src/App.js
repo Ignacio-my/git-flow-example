@@ -16,7 +16,7 @@ function App() {
         <p>
           For the University of Valparaíso
         </p>
-        <span>New Version</span>
+        <span>  Nueva version  d</span>
       </header>
     </div>
   );
