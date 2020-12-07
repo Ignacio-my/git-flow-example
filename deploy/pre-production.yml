@@ -7,6 +7,13 @@ pool:
   vmImage: "ubuntu-latest"
 
 steps:
+
+  - task: NodeTool@0    
+    inputs:
+      versionSpec: "12.x"
+      
+    displayName: "Install Node.js"
+    
   - task: gitversion/setup@0
     inputs:
       versionSpec: '5.1'
@@ -18,12 +25,35 @@ steps:
       useConfigFile: false
     displayName: "generando la nueva versión"
 
-  - task: Docker@2
-    inputs:
-      containerRegistry: 'docker trifenix'
-      repository: 'trifenix/doc-site'
-      command: 'buildAndPush'
-      Dockerfile: '**/Dockerfile'
-      tags : "$(MajorMinorPatch)$(PreReleaseTagWithDash).build.$(Build.BuildId)"
-
+  - task: Npm@1
     
+    inputs:
+      command: "custom"
+      customCommand: "--no-git-tag-version version "$(MajorMinorPatch)$(PreReleaseTagWithDash)"
+    displayName: "actualizando package.json"
+
+  - task: CmdLine@2
+    inputs:
+      script: 'npm install'
+    displayName: "npm install"
+
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: 'run build'
+    displayName: "build"
+
+  
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: "build"
+      contents: "**"
+      targetFolder: $(Build.ArtifactStagingDirectory)
+    displayName: "Copy Build"
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: "$(Build.ArtifactStagingDirectory)"
+      artifactName: drop
+      publishLocation: 'container'
+    displayName: "Publish npm artifact"
