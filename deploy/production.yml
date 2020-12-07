@@ -2,6 +2,7 @@ trigger:
     branches:
       include:
         - master
+        - main
   
 pool:
   vmImage: "ubuntu-latest"
@@ -28,7 +29,7 @@ steps:
   - task: Npm@1      
     inputs:
       command: "custom"
-      customCommand: "--no-git-tag-version version $(MajorMinorPatch)"
+      customCommand: "--no-git-tag-version version $(GitVersion.MajorMinorPatch)"
     displayName: "actualizando package.json"
     
   - task: CmdLine@2
