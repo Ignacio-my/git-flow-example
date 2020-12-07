@@ -29,7 +29,7 @@ steps:
     
     inputs:
       command: "custom"
-      customCommand: "--no-git-tag-version version "$(MajorMinorPatch)$(PreReleaseTagWithDash)"
+      customCommand: "--no-git-tag-version version $(MajorMinorPatch)$(PreReleaseTagWithDash)"
     displayName: "actualizando package.json"
 
   - task: CmdLine@2
